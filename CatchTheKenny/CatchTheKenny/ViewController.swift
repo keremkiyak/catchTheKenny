@@ -9,6 +9,8 @@ import UIKit
 
 class ViewController: UIViewController {
     var score = 0
+    var timer = Timer()
+  
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var highScoreLabel: UILabel!
@@ -55,13 +57,34 @@ class ViewController: UIViewController {
         kenny7.addGestureRecognizer(recognizer7)
         kenny8.addGestureRecognizer(recognizer8)
         kenny9.addGestureRecognizer(recognizer9)
-        
+        timeLabel.text = "Score:\(score)"
+        timer = Timer.scheduledTimer(timeInterval:1, target:self ,selector: #selector(countDown),userInfo:nil, repeats :true)
     }
+    //timers
+     var counter = 10
+    
+    
+    
     @objc func increaseScore(){
         score += 1
         scoreLabel.text = "Score:\(score)"//burdaki değer güncellensin diye scoru birdaha yazdırıyoruz.
     }
-
+    @objc func countDown(){
+        counter -= 1
+        timeLabel.text = String(counter)
+        if counter == 0{
+            timer.invalidate()
+            let alert = UIAlertController(title: "Time'up", message: "Do you want to play again?", preferredStyle:UIAlertController.Style.alert)
+            let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel)
+            let replayButton = UIAlertAction(title: "Replay", style: UIAlertAction.Style.default)
+            alert.addAction(okButton)
+            alert.addAction(replayButton)
+            self.present(alert,animated: true,completion: nil)
+        }
+       
+    }
+    
 
 }
 
+//belli bir şeyi belirli bir süre çalıştırmak için timer kullanılır.

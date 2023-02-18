@@ -94,7 +94,15 @@ class ViewController: UIViewController {
             
             let alert = UIAlertController(title: "Time'up", message: "Do you want to play again?", preferredStyle:UIAlertController.Style.alert)
             let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel,handler:nil)
-            let replayButton = UIAlertAction(title: "Replay", style: UIAlertAction.Style.default)
+            let replayButton = UIAlertAction(title: "replay", style: UIAlertAction.Style.default) { UIAlertAction in
+                self.score = 0
+                self.scoreLabel.text = "Score: \(self.score)"
+                self.counter = 10
+                self.timeLabel.text = String(self.counter)
+                self.timer = Timer.scheduledTimer(timeInterval:1, target:self ,selector: #selector(self.countDown),userInfo:nil, repeats :true)
+                
+                self.hideTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.hideKenny) , userInfo: nil, repeats: true)
+            }
             alert.addAction(okButton)
             alert.addAction(replayButton)
             self.present(alert,animated: true,completion: nil)

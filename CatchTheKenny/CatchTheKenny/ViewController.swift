@@ -10,7 +10,8 @@ import UIKit
 class ViewController: UIViewController {
     var score = 0
     var timer = Timer()
-  
+    var hideTimer = Timer()
+  var kennyArray = [UIImageView]()
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var highScoreLabel: UILabel!
@@ -57,14 +58,25 @@ class ViewController: UIViewController {
         kenny7.addGestureRecognizer(recognizer7)
         kenny8.addGestureRecognizer(recognizer8)
         kenny9.addGestureRecognizer(recognizer9)
+        
+        kennyArray = [kenny1,kenny2,kenny3,kenny4,kenny5,kenny6,kenny7,kenny8,kenny9]
         timeLabel.text = "Score:\(score)"
         timer = Timer.scheduledTimer(timeInterval:1, target:self ,selector: #selector(countDown),userInfo:nil, repeats :true)
+        
+        hideTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(hideKenny) , userInfo: nil, repeats: true)
+        hideKenny()
     }
     //timers
      var counter = 10
     
     
-    
+    @objc func hideKenny(){
+        for kenny in kennyArray {
+            kenny.isHidden = true
+        }
+        let random = (Int(arc4random_uniform(UInt32(kennyArray.count-1))))
+        kennyArray[random].isHidden = false
+    }
     @objc func increaseScore(){
         score += 1
         scoreLabel.text = "Score:\(score)"//burdaki değer güncellensin diye scoru birdaha yazdırıyoruz.
@@ -74,8 +86,14 @@ class ViewController: UIViewController {
         timeLabel.text = String(counter)
         if counter == 0{
             timer.invalidate()
+            hideTimer.invalidate()
+            
+            for kenny in kennyArray {
+                kenny.isHidden = true
+            }
+            
             let alert = UIAlertController(title: "Time'up", message: "Do you want to play again?", preferredStyle:UIAlertController.Style.alert)
-            let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel)
+            let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel,handler:nil)
             let replayButton = UIAlertAction(title: "Replay", style: UIAlertAction.Style.default)
             alert.addAction(okButton)
             alert.addAction(replayButton)

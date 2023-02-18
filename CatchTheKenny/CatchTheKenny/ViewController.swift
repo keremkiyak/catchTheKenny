@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     var timer = Timer()
     var hideTimer = Timer()
   var kennyArray = [UIImageView]()
+    var  highScore = 0
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet weak var highScoreLabel: UILabel!
@@ -29,7 +30,17 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         scoreLabel.text = "Score:\(score)"
         
-        
+//        high score check
+        let storedHighScore = UserDefaults.standard.object(forKey: "highScore")
+        if storedHighScore == nil{
+            highScore = 0
+            highScoreLabel.text = "Highscore: \(highScore)"
+        }
+        if let newScore = storedHighScore as? Int{
+            highScore = newScore
+            highScoreLabel.text = "high score:\(highScore)"
+        }
+            
         kenny1.isUserInteractionEnabled = true//kullanıcının kennynin üstüne tıklamasını aktif hale getiriyor.
         kenny2.isUserInteractionEnabled = true
         kenny3.isUserInteractionEnabled = true
@@ -92,6 +103,13 @@ class ViewController: UIViewController {
                 kenny.isHidden = true
             }
             
+            
+//            high score
+            if self.score>self.highScore{
+                self.highScore = self.score
+                highScoreLabel.text = "High Score:\(self.highScore)"
+                UserDefaults.standard.set(self.highScore, forKey: "highScore")
+            }
             let alert = UIAlertController(title: "Time'up", message: "Do you want to play again?", preferredStyle:UIAlertController.Style.alert)
             let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.cancel,handler:nil)
             let replayButton = UIAlertAction(title: "replay", style: UIAlertAction.Style.default) { UIAlertAction in
